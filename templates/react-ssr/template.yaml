@@ -52,17 +52,14 @@ spec:
           ui:options:
             allowedKinds:
               - Group
-    - title: Choose a location
+    - title: Choose a repository name
       required:
-        - repoUrl
+        - repoName
       properties:
-        repoUrl:
-          title: Repository Location
+        repoName:
+          title: Repository Name
           type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
+          description: Name of the GitHub repository to create (must not already exist)
   steps:
     - id: template
       name: Fetch Skeleton + Template
@@ -74,7 +71,6 @@ spec:
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
 
     - id: publish
@@ -83,7 +79,9 @@ spec:
       input:
         allowedHosts: ["github.com"]
         description: Initial source tree for ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
+        repoUrl: github.com?repo=${{ parameters.repoName }}&owner=YogiSoni-lazy
+        defaultBranch: main
+        repoVisibility: public  # or private
 
     - id: register
       name: Register
